@@ -14,6 +14,10 @@ async function main() {
   const app = await buildApp();
   if (env.SEED_DEMO && !isProd) await seedDemo({ ifEmpty: true, app });
   await app.listen({ port: env.PORT, host: env.HOST });
+  if (env.SEED_DEMO && isProd && env.ALLOW_DEMO_SEED_IN_PRODUCTION) {
+    // Hosted demo: open the port first so the platform sees a healthy service, then build the demo company.
+    void seedDemo({ ifEmpty: true, app }).catch((err) => app.log.error({ err }, 'Demo seed failed'));
+  }
   startWorker();
   app.log.info(`Maal Help API ready on http://localhost:${env.PORT} (database: ${handle.driver})`);
 

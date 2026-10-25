@@ -33,6 +33,8 @@ const schema = z.object({
   DATABASE_URL: optional,
   PGLITE_DIR: str('./.data/pg'),
   DB_POOL_MAX: num(10),
+  // Optional dedicated Postgres schema (e.g. "maalhelp") so Maal Help can share a database safely.
+  DB_SCHEMA: str(''),
   SESSION_SECRET: str('dev-only-session-secret-change-me-please'),
   ENCRYPTION_KEY: optional,
   SESSION_TTL_HOURS: num(12),
@@ -65,6 +67,11 @@ const schema = z.object({
   WHATSAPP_API_TOKEN: optional,
   LOG_LEVEL: str('info'),
   SEED_DEMO: bool(true),
+  // Demo/staging only: allow the demo company in NODE_ENV=production (seeded in the background after start).
+  ALLOW_DEMO_SEED_IN_PRODUCTION: bool(false),
+  // Optional: create/update a platform admin at start (credentials from the environment, never source).
+  PLATFORM_ADMIN_EMAIL: optional,
+  PLATFORM_ADMIN_PASSWORD: optional,
 });
 
 const parsed = schema.safeParse(process.env);

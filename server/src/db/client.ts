@@ -33,12 +33,18 @@ export async function openDatabase(opts: { url?: string; dataDir?: string } = {}
     const { Pool } = (await import('pg')).default;
     const { drizzle } = await import('drizzle-orm/node-postgres');
     const { migrate } = await import('drizzle-orm/node-postgres/migrator');
-    const pool = new Pool({ connectionString: url, max: env.DB_POOL_MAX });
+    const dbSchema = env.DB_SCHEMA;
+    if (dbSchema && !/^[a-z_][a-z0-9_]*$/.test(dbSchema)) throw new Error('DB_SCHEMA must be a lowercase identifier.');
+    // With DB_SCHEMA every connection sees only that schema, so tables never mix with other apps' tables.
+    const pool = new Pool({ connectionString: url, max: env.DB_POOL_MAX, ...(dbSchema ? { options: `-c search_path=${dbSchema}` } : {}) });
     const db = drizzle(pool, { schema, casing: 'snake_case' }) as unknown as Db;
     return {
       db,
       driver: 'postgres',
-      migrate: () => migrate(db as never, { migrationsFolder: MIGRATIONS_FOLDER }),
+      migrate: async () => {
+        if (dbSchema) await pool.query(`CREATE SCHEMA IF NOT EXISTS "${dbSchema}"`);
+        await migrate(db as never, { migrationsFolder: MIGRATIONS_FOLDER, ...(dbSchema ? { migrationsSchema: dbSchema } : {}) });
+      },
       close: () => pool.end(),
     };
   }

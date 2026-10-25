@@ -50,7 +50,13 @@ export async function ensurePlatformData(): Promise<void> {
     { key: 'integrations.ecommerce', description: 'E-commerce connectors (preview)', enabled: false },
   ];
   for (const f of flags) await db().insert(t.featureFlags).values(f).onConflictDoNothing();
-  if (env.NODE_ENV !== 'production') {
+  if (env.PLATFORM_ADMIN_EMAIL && env.PLATFORM_ADMIN_PASSWORD) {
+    const email = env.PLATFORM_ADMIN_EMAIL.trim().toLowerCase();
+    const passwordHash = await hashPassword(env.PLATFORM_ADMIN_PASSWORD);
+    const [found] = await db().select({ id: t.users.id }).from(t.users).where(eq(t.users.email, email)).limit(1);
+    if (found) await db().update(t.users).set({ passwordHash, isPlatformAdmin: true }).where(eq(t.users.id, found.id));
+    else await db().insert(t.users).values({ email, name: 'Platform Administrator', passwordHash, isPlatformAdmin: true });
+  } else if (env.NODE_ENV !== 'production') {
     const [admin] = await db().select({ id: t.users.id }).from(t.users).where(eq(t.users.email, PLATFORM_ADMIN.email)).limit(1);
     if (!admin) await db().insert(t.users).values({ email: PLATFORM_ADMIN.email, name: PLATFORM_ADMIN.name, passwordHash: await hashPassword(DEMO_PASSWORD), isPlatformAdmin: true });
   }

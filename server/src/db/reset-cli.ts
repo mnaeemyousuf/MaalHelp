@@ -21,8 +21,13 @@ if (!env.DATABASE_URL) {
 const handle = await openDatabase();
 setDatabase(handle);
 if (env.DATABASE_URL) {
-  await handle.db.execute(sql`DROP SCHEMA public CASCADE; CREATE SCHEMA public;`);
-  await handle.db.execute(sql`DROP SCHEMA IF EXISTS drizzle CASCADE`);
+  if (env.DB_SCHEMA) {
+    // Shared database: only ever drop Maal Help's own schema, never public or other apps' data.
+    await handle.db.execute(sql.raw(`DROP SCHEMA IF EXISTS "${env.DB_SCHEMA}" CASCADE`));
+  } else {
+    await handle.db.execute(sql`DROP SCHEMA public CASCADE; CREATE SCHEMA public;`);
+    await handle.db.execute(sql`DROP SCHEMA IF EXISTS drizzle CASCADE`);
+  }
 }
 await handle.migrate();
 await ensurePlatformData();

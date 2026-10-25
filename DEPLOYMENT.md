@@ -110,3 +110,18 @@ CMD ["node", "dist/server/index.js"]
 3. Check `/api/v1/health` and **Platform → System health**.
 
 Migrations only move forward. Restore from backup to roll back a schema change.
+
+## 8. Render (hosted demo)
+
+| Setting | Value |
+|---|---|
+| Runtime / region | Node · same region as the database (internal URL) |
+| Build command | `npm ci --include=dev && npm run build` |
+| Start command | `npm start` |
+| Health check path | `/api/v1/health` |
+
+Environment: `NODE_ENV=production`, `NODE_VERSION=22`, `DATABASE_URL` (the database's **internal** URL, pasted in the dashboard), `SESSION_SECRET`, `ENCRYPTION_KEY`, `COOKIE_SECURE=true`, `APP_ORIGIN=https://<service>.onrender.com`.
+
+**Sharing a database with another app:** set `DB_SCHEMA=maalhelp`. Maal Help then creates and uses only that Postgres schema (tables, migrations table and triggers), and `db:reset` drops only that schema, never `public`.
+
+**Hosted demo data (staging only):** `SEED_DEMO=true`, `ALLOW_DEMO_SEED_IN_PRODUCTION=true` and a unique `DEMO_PASSWORD`. The demo company is built in the background after the server starts (allow ~10–15 minutes). `PLATFORM_ADMIN_EMAIL` / `PLATFORM_ADMIN_PASSWORD` create or update the Super Admin at start. Remove these variables for real use.

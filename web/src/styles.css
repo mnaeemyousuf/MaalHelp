@@ -1,0 +1,76 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* Maal Help palette — "Maal Blue" primary from the logo tile, "Crate Amber" accent from the crate.
+     brand-700 on white = 9.1:1, white on brand-700 = 9.1:1 (WCAG AAA); accent-500 is used with dark text only. */
+  --color-brand-50: #eef3ff;
+  --color-brand-100: #dbe5ff;
+  --color-brand-200: #bfd0ff;
+  --color-brand-300: #93b0fd;
+  --color-brand-400: #6087f8;
+  --color-brand-500: #3b63f0;
+  --color-brand-600: #2647d8;
+  --color-brand-700: #1f37b0;
+  --color-brand-800: #1f318d;
+  --color-brand-900: #1e2e6f;
+  --color-brand-950: #141c42;
+  --color-accent-50: #fffbeb;
+  --color-accent-100: #fef3c7;
+  --color-accent-200: #fde68a;
+  --color-accent-300: #fcd34d;
+  --color-accent-400: #fbbf24;
+  --color-accent-500: #f59e0b;
+  --color-accent-600: #d97706;
+  --color-accent-700: #b45309;
+  --color-accent-800: #92400e;
+  --color-accent-900: #78350f;
+  --color-ink-50: #f8fafc;
+  --color-ink-100: #f1f5f9;
+  --color-ink-200: #e2e8f0;
+  --color-ink-300: #cbd5e1;
+  --color-ink-400: #94a3b8;
+  --color-ink-500: #64748b;
+  --color-ink-600: #475569;
+  --color-ink-700: #334155;
+  --color-ink-800: #1e293b;
+  --color-ink-900: #0f172a;
+  --shadow-card: 0 1px 2px rgb(15 23 42 / 0.04), 0 1px 3px rgb(15 23 42 / 0.06);
+  --shadow-pop: 0 10px 30px -10px rgb(15 23 42 / 0.25), 0 4px 10px -4px rgb(15 23 42 / 0.1);
+  --animate-fade-in: fade-in 0.15s ease-out;
+  --animate-slide-up: slide-up 0.18s ease-out;
+}
+
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slide-up { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+@layer base {
+  html { -webkit-tap-highlight-color: transparent; }
+  body { @apply bg-ink-50 text-ink-800 antialiased; font-feature-settings: 'cv11', 'ss01'; }
+  h1, h2, h3, h4 { @apply text-ink-900; }
+  :focus-visible { @apply outline-2 outline-offset-2 outline-brand-500; }
+  ::selection { @apply bg-brand-100; }
+  input[type='number']::-webkit-inner-spin-button { opacity: 0.4; }
+}
+
+@layer components {
+  .card { @apply rounded-xl border border-ink-200 bg-white shadow-card; }
+  .num { font-variant-numeric: tabular-nums; }
+  .scrollbar-thin { scrollbar-width: thin; }
+  .skeleton { @apply animate-pulse rounded-md bg-ink-200/70; }
+}
+
+/* ── Printing: documents, labels and reports print cleanly without app chrome ── */
+@media print {
+  @page { margin: 12mm; }
+  body { background: white !important; }
+  .no-print, aside, header[data-app-header], nav[data-mobile-nav] { display: none !important; }
+  .print-area { box-shadow: none !important; border: none !important; padding: 0 !important; margin: 0 !important; }
+  .print-break { break-after: page; }
+  a { color: inherit; text-decoration: none; }
+  body.printing-labels #root { display: none !important; }
+  body.printing-labels [role='dialog'] { position: static !important; transform: none !important; max-height: none !important; width: auto !important; box-shadow: none !important; border: 0 !important; }
+  body.printing-labels [role='dialog'] > div:first-child, body.printing-labels [role='dialog'] > div:last-child:not(.overflow-y-auto) { display: none !important; }
+}
+.label-sheet { display: grid; gap: 4mm; grid-template-columns: repeat(auto-fill, minmax(var(--label-w, 50mm), 1fr)); }
+.label { width: var(--label-w, 50mm); min-height: var(--label-h, 25mm); break-inside: avoid; }

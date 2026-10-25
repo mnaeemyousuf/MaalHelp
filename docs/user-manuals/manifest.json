@@ -1,0 +1,78 @@
+{
+  "version": "1.0",
+  "date": "25 October 2026",
+  "manuals": [
+    {
+      "file": "Super_Admin_User_Manual.pdf",
+      "title": "Super Admin",
+      "role": "SaaS Super Admin (platform)",
+      "pages": 15
+    },
+    {
+      "file": "Business_Owner_User_Manual.pdf",
+      "title": "Business Owner",
+      "role": "Business Owner",
+      "pages": 39
+    },
+    {
+      "file": "Warehouse_Manager_User_Manual.pdf",
+      "title": "Warehouse Manager",
+      "role": "Warehouse Manager",
+      "pages": 35
+    },
+    {
+      "file": "Inventory_Controller_User_Manual.pdf",
+      "title": "Inventory Controller",
+      "role": "Inventory Controller",
+      "pages": 23
+    },
+    {
+      "file": "Warehouse_Operator_User_Manual.pdf",
+      "title": "Warehouse Operator",
+      "role": "Warehouse Operator",
+      "pages": 23
+    },
+    {
+      "file": "Receiving_Clerk_User_Manual.pdf",
+      "title": "Receiving Clerk",
+      "role": "Receiving Clerk",
+      "pages": 21
+    },
+    {
+      "file": "Picker_Packer_User_Manual.pdf",
+      "title": "Picker / Packer",
+      "role": "Picker / Packer",
+      "pages": 19
+    },
+    {
+      "file": "Dispatch_Officer_User_Manual.pdf",
+      "title": "Dispatch Officer",
+      "role": "Dispatch Officer",
+      "pages": 16
+    },
+    {
+      "file": "Sales_User_Manual.pdf",
+      "title": "Sales User",
+      "role": "Sales User",
+      "pages": 19
+    },
+    {
+      "file": "Purchase_User_Manual.pdf",
+      "title": "Purchase User",
+      "role": "Purchase User",
+      "pages": 19
+    },
+    {
+      "file": "Accountant_Billing_User_Manual.pdf",
+      "title": "Accountant / Billing",
+      "role": "Accountant",
+      "pages": 20
+    },
+    {
+      "file": "Auditor_User_Manual.pdf",
+      "title": "Auditor",
+      "role": "Auditor",
+      "pages": 16
+    }
+  ]
+}

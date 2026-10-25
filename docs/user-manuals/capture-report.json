@@ -1,0 +1,22 @@
+{
+  "capturedAt": "2026-10-24T21:04:23.544Z",
+  "failures": [],
+  "issues": [
+    {
+      "file": "login",
+      "role": null,
+      "path": "/login",
+      "problems": [
+        "HTTP 401 /api/v1/auth/me"
+      ]
+    },
+    {
+      "file": "register",
+      "role": null,
+      "path": "/register",
+      "problems": [
+        "HTTP 401 /api/v1/auth/me"
+      ]
+    }
+  ]
+}

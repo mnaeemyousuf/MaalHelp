@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 72" role="img" aria-label="Maal Help — Your Warehouse. Under Control.">
+  <defs>
+    <linearGradient id="mh-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2647d8"/>
+      <stop offset="1" stop-color="#1e2e6f"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(4 4)">
+    <rect width="64" height="64" rx="15" fill="url(#mh-bg)"/>
+    <path d="M10.5 30.5 21.5 19 32 29 42.5 19 53.5 30.5" fill="none" stroke="#fff" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M15.5 26.2v22.3h33V26.2" fill="none" stroke="#fff" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="24.5" y="34" width="15" height="12.5" rx="2.4" fill="#f59e0b"/>
+    <path d="M28 40.3l2.8 2.8 5.4-5.6" fill="none" stroke="#1e2e6f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="84" y="40" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="30" font-weight="800" letter-spacing="-0.8" fill="#1e2e6f">Maal <tspan fill="#2647d8">Help</tspan></text>
+  <text x="85" y="60" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="12.5" font-weight="600" letter-spacing="0.4" fill="#64748b">Your Warehouse. Under Control.</text>
+</svg>

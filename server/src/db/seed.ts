@@ -9,7 +9,7 @@
  * immutability triggers are disabled, and only while seeding fictional data.
  */
 import type { FastifyInstance } from 'fastify';
-import { eq, sql } from 'drizzle-orm';
+import { and, eq, isNull, sql } from 'drizzle-orm';
 import { db, rows, t } from './index';
 import { hashPassword } from '../core/crypto';
 import { env } from '../config/env';
@@ -104,7 +104,7 @@ const SHIFT_EXCLUDE = new Set(['sessions', 'users', 'jobs', 'idempotency_keys', 
 async function shiftSince(marker: string, days: number) {
   if (days === 0) return;
   if (!timeColumns) {
-    const cols = await rows<{ table_name: string; column_name: string; data_type: string }>(db(), sql`SELECT table_name, column_name, data_type FROM information_schema.columns WHERE table_schema = 'public' AND data_type IN ('timestamp with time zone', 'date')`);
+    const cols = await rows<{ table_name: string; column_name: string; data_type: string }>(db(), sql`SELECT table_name, column_name, data_type FROM information_schema.columns WHERE table_schema = current_schema() AND data_type IN ('timestamp with time zone', 'date')`);
     const map = new Map<string, { ts: string[]; dates: string[]; hasCreated: boolean }>();
     for (const c of cols) {
       if (SHIFT_EXCLUDE.has(c.table_name)) continue;
@@ -232,6 +232,15 @@ const CUSTOMERS = [
 
 // ───────────────────────── Seed ─────────────────────────
 
+const DEMO_COMPLETE_KEY = 'demo.seed_complete';
+
+/** none = no demo company; partial = a previous seed stopped midway; complete = finished. */
+export async function demoState(): Promise<'none' | 'partial' | 'complete'> {
+  if (!(await demoExists())) return 'none';
+  const [done] = await db().select({ id: t.systemSettings.id }).from(t.systemSettings).where(and(eq(t.systemSettings.key, DEMO_COMPLETE_KEY), isNull(t.systemSettings.tenantId))).limit(1);
+  return done ? 'complete' : 'partial';
+}
+
 export async function demoExists(): Promise<boolean> {
   const [u] = await db().select({ id: t.users.id }).from(t.users).where(eq(t.users.email, DEMO_USERS[0].email)).limit(1);
   return Boolean(u);
@@ -251,6 +260,7 @@ export async function seedDemo(opts: { ifEmpty?: boolean; app?: FastifyInstance;
     await db().execute(sql`ALTER TABLE inventory_transactions ENABLE TRIGGER inventory_transactions_immutable`);
     await db().execute(sql`ALTER TABLE audit_logs ENABLE TRIGGER audit_logs_immutable`);
   }
+  await db().insert(t.systemSettings).values({ key: DEMO_COMPLETE_KEY, tenantId: null, value: { at: new Date().toISOString() } }).onConflictDoNothing();
   log('Demo data ready.');
 }
 
